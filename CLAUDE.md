@@ -3,10 +3,11 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 @AGENTS.md
+@ui.md
 
 ## Status
 
-Only the Next.js scaffold and dependencies are installed so far; no feature code exists yet. `PRD.md` (Korean) is the source of truth for requirements, data model, and the 8-step implementation order (§12). Read it before building any feature.
+Only the Next.js scaffold and dependencies are installed so far; no feature code exists yet. `PRD.md` (Korean) is the source of truth for requirements, data model, and the 8-step implementation order (§12). Read it before building any feature. `ui.md` is the UI guide (Tailwind design tokens, screen layouts, news/category card specs); follow it for any UI work.
 
 ## Commands
 

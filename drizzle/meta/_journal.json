@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794212469315,
+      "tag": "0000_omniscient_saracen",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794212559936,
+      "tag": "0001_ancient_daimon_hellstrom",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794215021837,
+      "tag": "0002_broad_red_wolf",
+      "breakpoints": true
+    }
+  ]
+}

@@ -87,6 +87,7 @@
 | summary | 한국어 요약 |
 | url | 원문 링크 (고유, 중복 방지) |
 | press | 언론사 |
+| author | 원문 기사 작성자 (기자명, 없으면 null) |
 | published_at | 발행 시각 |
 | category_id | FK → categories (삭제 시 미분류로 이동) |
 | fetched_at | 수집 시각 |

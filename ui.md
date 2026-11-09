@@ -78,7 +78,7 @@ export const CATEGORY_COLORS = {
 - 우측: **뉴스 가져오기** 주 버튼(아이콘 포함), Clerk `UserButton`
 - 가져오는 중: 버튼 비활성화 + 스피너 + "가져오는 중…" 문구. 모바일에서는 버튼을 아이콘만 표시해도 된다.
 
-### 3.2 메인 화면: 카테고리 대시보드 (`/`)
+### 3.2 메인 화면: 카테고리 대시보드 (`/dashboard`)
 
 카테고리별 **카드뉴스 묶음 카드**를 그리드로 보여주는 메인 화면.
 
@@ -114,7 +114,7 @@ export const CATEGORY_COLORS = {
 - 중앙에 `+` 아이콘과 "카테고리 추가" 문구. 클릭 시 추가 모달 열기(§3.4).
 - 헤더 영역에도 보조 버튼 "＋ 카테고리 추가"(`border bg-white`)를 두어 카드가 아래로 밀려도 접근할 수 있게 한다.
 
-### 3.3 카테고리 화면: 카드뉴스 목록 (`/category/[id]`)
+### 3.3 카테고리 화면: 카드뉴스 목록 (`/dashboard/[id]`, 전체 보기는 `/dashboard/all`)
 
 카테고리 카드를 누르면 이동하는 화면. 해당 카테고리의 뉴스를 카드로 나열한다.
 
@@ -189,8 +189,10 @@ Clerk 컴포넌트를 화면 중앙에 배치하고, 위에 앱 이름 "AI뉴스
 ```
 src/
 ├─ app/
-│  ├─ page.tsx                    # 카테고리 대시보드
-│  └─ category/[id]/page.tsx      # 카테고리별 카드뉴스 목록
+│  └─ dashboard/
+│     ├─ layout.tsx               # 로그인 확인, 헤더, 본문 건너뛰기 링크
+│     ├─ page.tsx                 # 카테고리 대시보드
+│     └─ [id]/page.tsx            # 카테고리별 카드뉴스 목록 (id 또는 all)
 └─ components/
    ├─ site-header.tsx             # 헤더 (제목, 뉴스 가져오기, UserButton)
    ├─ fetch-news-button.tsx       # 가져오기 버튼 + 진행/결과 배너

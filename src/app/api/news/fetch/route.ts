@@ -5,7 +5,8 @@ import { saveArticles } from "@/lib/rss/save-articles";
 export const maxDuration = 30;
 
 export async function POST() {
-  const { items, failedSources, totalSources } = await fetchFeeds();
+  const { items, failedSources, missingConfig, totalSources } =
+    await fetchFeeds();
 
   // 모든 소스가 실패한 경우에만 오류로 본다.
   if (failedSources.length === totalSources) {
@@ -13,6 +14,7 @@ export async function POST() {
       {
         error: "뉴스를 가져오지 못했어요. 잠시 후 다시 시도해 주세요.",
         failedSources,
+        missingConfig,
       },
       { status: 502 },
     );
@@ -20,7 +22,12 @@ export async function POST() {
 
   try {
     const added = await saveArticles(items);
-    return Response.json({ added, fetched: items.length, failedSources });
+    return Response.json({
+      added,
+      fetched: items.length,
+      failedSources,
+      missingConfig,
+    });
   } catch (error) {
     console.error("기사 저장 실패", error);
     return Response.json(

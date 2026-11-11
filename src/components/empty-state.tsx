@@ -21,9 +21,6 @@ export function EmptyNewsState() {
         </p>
       </div>
       <FetchNewsButton />
-      <p className="text-xs text-slate-400 dark:text-neutral-500">
-        뉴스 가져오기는 준비 중입니다.
-      </p>
     </div>
   );
 }

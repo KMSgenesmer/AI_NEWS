@@ -19,10 +19,13 @@ export async function getCategoryCounts(): Promise<CategoryWithCount[]> {
   return rows.filter((c) => c.name !== "미분류" || c.count > 0);
 }
 
-// 최신순: 발행 시각이 없는 기사는 뒤로, 같으면 수집 시각 순.
-// limit + 1건을 가져와 "더 있는지"를 함께 알려준다.
-export async function getArticles(categoryId: number | null, limit: number) {
-  const rows = await db
+// 최신순: 발행 시각이 없는 기사는 뒤로, 같으면 수집 시각 순. (page는 1부터 시작)
+export async function getArticles(
+  categoryId: number | null,
+  page: number,
+  pageSize: number,
+) {
+  return db
     .select({
       id: articles.id,
       title: articles.title,
@@ -41,9 +44,10 @@ export async function getArticles(categoryId: number | null, limit: number) {
     .orderBy(
       sql`${articles.publishedAt} desc nulls last`,
       desc(articles.fetchedAt),
+      desc(articles.id), // 페이지 사이에서 순서가 흔들리지 않도록 마지막 기준을 고정
     )
-    .limit(limit + 1);
-  return { items: rows.slice(0, limit), hasMore: rows.length > limit };
+    .limit(pageSize)
+    .offset((page - 1) * pageSize);
 }
 
 // 카테고리마다 최신 기사 제목 N개 (대시보드 카드 미리보기용)

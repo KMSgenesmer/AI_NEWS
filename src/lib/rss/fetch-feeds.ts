@@ -1,4 +1,8 @@
-import { fetchNaverNews, NAVER_SOURCE_NAME } from "./naver-news";
+import {
+  fetchNaverNews,
+  MissingConfigError,
+  NAVER_SOURCE_NAME,
+} from "./naver-news";
 import { parseFeed, type SourceItem } from "./parse-feed";
 import {
   FEED_SOURCES,
@@ -12,6 +16,8 @@ export type { SourceItem };
 export type FetchFeedsResult = {
   items: SourceItem[];
   failedSources: string[];
+  /** failedSources 중 API 키 등 설정이 없어서 실패한 소스 */
+  missingConfig: string[];
   totalSources: number;
 };
 
@@ -46,13 +52,17 @@ export async function fetchFeeds(now = new Date()): Promise<FetchFeedsResult> {
 
   const items: SourceItem[] = [];
   const failedSources: string[] = [];
+  const missingConfig: string[] = [];
   results.forEach((result, i) => {
     if (result.status === "fulfilled") {
       items.push(...result.value);
     } else {
       failedSources.push(tasks[i].name);
+      if (result.reason instanceof MissingConfigError) {
+        missingConfig.push(tasks[i].name);
+      }
       console.warn(`[뉴스 수집] ${tasks[i].name} 실패:`, result.reason);
     }
   });
-  return { items, failedSources, totalSources: tasks.length };
+  return { items, failedSources, missingConfig, totalSources: tasks.length };
 }

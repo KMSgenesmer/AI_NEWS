@@ -6,7 +6,12 @@ import { useRouter } from "next/navigation";
 type State =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "success"; added: number; failedSources: string[] }
+  | {
+      status: "success";
+      added: number;
+      failedSources: string[];
+      missingConfig: string[];
+    }
   | { status: "error"; message: string };
 
 const FOCUS_RING =
@@ -39,6 +44,7 @@ export function FetchNewsButton({ compact = false }: { compact?: boolean }) {
         status: "success",
         added: data.added,
         failedSources: data.failedSources ?? [],
+        missingConfig: data.missingConfig ?? [],
       });
       router.refresh();
     } catch {
@@ -102,8 +108,13 @@ export function FetchNewsButton({ compact = false }: { compact?: boolean }) {
             {state.added > 0
               ? `새 뉴스 ${state.added}건을 추가했어요`
               : "새로 추가된 뉴스가 없어요"}
-            {state.failedSources.length > 0 &&
-              ` (${state.failedSources.join(", ")}은(는) 가져오지 못했어요)`}
+            {state.failedSources.length > 0 && (
+              <span className="mt-1 block text-xs">
+                가져오지 못한 곳: {state.failedSources.join(", ")}
+                {state.missingConfig.length > 0 &&
+                  ` — ${state.missingConfig.join(", ")}은 API 키가 설정되지 않았어요. .env.local의 NAVER_CLIENT_ID / NAVER_CLIENT_SECRET을 확인해 주세요.`}
+              </span>
+            )}
           </p>
         )}
         {state.status === "error" && (

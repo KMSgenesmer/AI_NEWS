@@ -10,6 +10,9 @@ const ENDPOINT = "https://openapi.naver.com/v1/search/news.json";
 // 이 앱의 주제(AI)에 맞는 검색어. 결과는 URL 기준으로 합쳐진다.
 const QUERIES = ["인공지능", "생성형 AI"];
 
+// 키가 없는 경우를 일반 오류와 구분해, 화면에서 원인을 안내할 수 있게 한다.
+export class MissingConfigError extends Error {}
+
 type NaverItem = {
   title: string;
   originallink: string;
@@ -35,7 +38,9 @@ async function search(query: string, since: Date): Promise<SourceItem[]> {
   const id = process.env.NAVER_CLIENT_ID;
   const secret = process.env.NAVER_CLIENT_SECRET;
   if (!id || !secret) {
-    throw new Error("NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 환경변수가 없습니다.");
+    throw new MissingConfigError(
+      "NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 환경변수가 없습니다.",
+    );
   }
 
   const url = `${ENDPOINT}?${new URLSearchParams({

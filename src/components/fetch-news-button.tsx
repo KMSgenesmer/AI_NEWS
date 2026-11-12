@@ -10,7 +10,7 @@ type State =
       status: "success";
       added: number;
       failedSources: string[];
-      missingConfig: string[];
+      failedEnrich: number;
     }
   | { status: "error"; message: string };
 
@@ -44,7 +44,7 @@ export function FetchNewsButton({ compact = false }: { compact?: boolean }) {
         status: "success",
         added: data.added,
         failedSources: data.failedSources ?? [],
-        missingConfig: data.missingConfig ?? [],
+        failedEnrich: data.failedEnrich ?? 0,
       });
       router.refresh();
     } catch {
@@ -108,12 +108,15 @@ export function FetchNewsButton({ compact = false }: { compact?: boolean }) {
             {state.added > 0
               ? `새 뉴스 ${state.added}건을 추가했어요`
               : "새로 추가된 뉴스가 없어요"}
+            {state.failedEnrich > 0 && (
+              <span className="mt-1 block text-xs">
+                AI 번역·요약에 실패한 {state.failedEnrich}건은 원문 그대로
+                &lsquo;미분류&rsquo;로 저장했어요.
+              </span>
+            )}
             {state.failedSources.length > 0 && (
               <span className="mt-1 block text-xs">
-                가져오지 못한 곳: {state.failedSources.join(", ")}
-                {state.missingConfig.length > 0 &&
-                  ` — ${state.missingConfig.join(", ")}은 API 키가 설정되지 않았어요. .env.local의 NAVER_CLIENT_ID / NAVER_CLIENT_SECRET을 확인해 주세요.`}
-              </span>
+                가져오지 못한 곳: {state.failedSources.join(", ")}              </span>
             )}
           </p>
         )}

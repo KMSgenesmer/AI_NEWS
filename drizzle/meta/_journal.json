@@ -22,6 +22,20 @@
       "when": 1794215021837,
       "tag": "0002_broad_red_wolf",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794393670045,
+      "tag": "0003_workable_gladiator",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794394902820,
+      "tag": "0004_safe_jocasta",
+      "breakpoints": true
     }
   ]
 }

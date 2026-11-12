@@ -58,7 +58,7 @@ export default async function CategoryPage({
           {current && (
             <span
               aria-hidden="true"
-              className={`size-2.5 rounded-full ${getCategoryColor(current.name).dot}`}
+              className={`size-2.5 rounded-full ${getCategoryColor(current.name, current.color).dot}`}
             />
           )}
           {title}

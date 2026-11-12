@@ -56,8 +56,23 @@ const FALLBACK: (keyof typeof COLORS)[] = [
   "emerald",
 ];
 
-// 기본 카테고리는 고정 색, 사용자가 추가한 카테고리는 이름 해시로 색을 배정한다.
-export function getCategoryColor(name: string) {
+export type ColorKey = keyof typeof COLORS;
+export const COLOR_KEYS = Object.keys(COLORS) as (keyof typeof COLORS)[];
+// 사용자가 고를 수 있는 색 ("미분류" 전용인 slate 제외)
+export const SELECTABLE_COLOR_KEYS = COLOR_KEYS.filter((k) => k !== "slate");
+
+export function isColorKey(value: unknown): value is keyof typeof COLORS {
+  return typeof value === "string" && value in COLORS;
+}
+
+export function getColorByKey(key: keyof typeof COLORS) {
+  return COLORS[key];
+}
+
+// DB에 저장된 색(color)이 있으면 그것을 쓰고, 없으면 기본 카테고리는 고정 색,
+// 그 밖의 카테고리는 이름 해시로 색을 배정한다.
+export function getCategoryColor(name: string, color?: string | null) {
+  if (isColorKey(color)) return COLORS[color];
   const known = BY_NAME[name];
   if (known) return COLORS[known];
   let hash = 0;

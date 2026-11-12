@@ -11,7 +11,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AI뉴스 모아보기",
-  description: "네이버 인기 뉴스를 Claude가 한국어로 요약하고 분류합니다.",
+  description: "AI 뉴스를 Claude가 한국어로 요약하고 분류합니다.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

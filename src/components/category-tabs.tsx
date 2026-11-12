@@ -1,6 +1,13 @@
 import Link from "next/link";
 
-export type CategoryTab = { id: number; name: string; count: number };
+import { getCategoryColor } from "@/lib/category-color";
+
+export type CategoryTab = {
+  id: number;
+  name: string;
+  count: number;
+  color?: string | null;
+};
 
 const base =
   "shrink-0 rounded-full px-4 py-2.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500";
@@ -16,7 +23,7 @@ export function CategoryTabs({
 }: {
   tabs: CategoryTab[];
   total: number;
-  selected: number | "all";
+  selected: number | "all" | null;
 }) {
   return (
     <nav aria-label="카테고리" className="flex gap-2 overflow-x-auto pb-1">
@@ -34,6 +41,10 @@ export function CategoryTabs({
           aria-current={selected === tab.id ? "page" : undefined}
           className={`${base} ${selected === tab.id ? active : inactive}`}
         >
+          <span
+            aria-hidden="true"
+            className={`mr-2 inline-block size-2 rounded-full ${getCategoryColor(tab.name, tab.color).dot}`}
+          />
           {tab.name} {tab.count}
         </Link>
       ))}

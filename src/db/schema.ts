@@ -11,6 +11,10 @@ import {
 export const categories = pgTable("categories", {
   id: serial("id").primaryKey(),
   name: text("name").notNull().unique(),
+  // 영문 ID (소문자·숫자·하이픈). 기존 행은 마이그레이션에서 채우고, 없으면 null.
+  slug: text("slug").unique(),
+  // category-color.ts 의 색 이름 (rose, amber, ...). null이면 이름 기반 기본 색.
+  color: text("color"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
@@ -20,6 +24,8 @@ export const categories = pgTable("categories", {
 export const articles = pgTable("articles", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
+  // 번역 전 원문 제목. 번역 품질 확인과 재처리용.
+  titleOriginal: text("title_original"),
   summary: text("summary").notNull(),
   // 중복 방지를 위해 URL은 고유값
   url: text("url").notNull().unique(),
@@ -36,7 +42,7 @@ export const articles = pgTable("articles", {
     .defaultNow(),
   notionSaved: boolean("notion_saved").notNull().default(false),
   notionPageUrl: text("notion_page_url"),
-  // 네이버 랭킹 순위 (1이 가장 높음). 수집 시점의 순위이며, 알 수 없으면 null.
+  // 수집 시점의 순위 (1이 가장 높음). 현재 수집원에서는 채우지 않아 null.
   rank: integer("rank"),
 }, (table) => [
   index("articles_category_id_idx").on(table.categoryId),

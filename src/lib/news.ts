@@ -2,7 +2,12 @@ import { count, desc, eq, lte, max, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { articles, categories } from "@/db/schema";
 
-export type CategoryWithCount = { id: number; name: string; count: number };
+export type CategoryWithCount = {
+  id: number;
+  name: string;
+  color: string | null;
+  count: number;
+};
 
 // 카테고리별 기사 수 (정렬 순서대로). 기사가 없는 "미분류"는 숨긴다.
 export async function getCategoryCounts(): Promise<CategoryWithCount[]> {
@@ -10,6 +15,7 @@ export async function getCategoryCounts(): Promise<CategoryWithCount[]> {
     .select({
       id: categories.id,
       name: categories.name,
+      color: categories.color,
       count: count(articles.id),
     })
     .from(categories)
@@ -35,6 +41,7 @@ export async function getArticles(
       author: articles.author,
       publishedAt: articles.publishedAt,
       categoryName: categories.name,
+      categoryColor: categories.color,
       notionSaved: articles.notionSaved,
       notionPageUrl: articles.notionPageUrl,
     })
@@ -73,6 +80,53 @@ export async function getLatestHeadlines(perCategory = 3) {
   for (const row of rows) {
     const list = byCategory.get(row.categoryId) ?? [];
     list.push(row.title);
+    byCategory.set(row.categoryId, list);
+  }
+  return byCategory;
+}
+
+// 카테고리마다 최신 기사 N개 전체 (메인 화면의 카테고리별 섹션용)
+export async function getLatestArticlesByCategory(perCategory = 6) {
+  const ranked = db
+    .select({
+      id: articles.id,
+      rn: sql<number>`row_number() over (partition by ${articles.categoryId} order by ${articles.publishedAt} desc nulls last, ${articles.fetchedAt} desc, ${articles.id} desc)`.as(
+        "rn",
+      ),
+    })
+    .from(articles)
+    .as("ranked");
+
+  const rows = await db
+    .select({
+      id: articles.id,
+      categoryId: articles.categoryId,
+      title: articles.title,
+      summary: articles.summary,
+      url: articles.url,
+      press: articles.press,
+      author: articles.author,
+      publishedAt: articles.publishedAt,
+      categoryName: categories.name,
+      categoryColor: categories.color,
+      notionSaved: articles.notionSaved,
+      notionPageUrl: articles.notionPageUrl,
+    })
+    .from(ranked)
+    .innerJoin(articles, eq(articles.id, ranked.id))
+    .innerJoin(categories, eq(articles.categoryId, categories.id))
+    .where(lte(ranked.rn, perCategory))
+    .orderBy(
+      articles.categoryId,
+      sql`${articles.publishedAt} desc nulls last`,
+      desc(articles.fetchedAt),
+      desc(articles.id),
+    );
+
+  const byCategory = new Map<number, typeof rows>();
+  for (const row of rows) {
+    const list = byCategory.get(row.categoryId) ?? [];
+    list.push(row);
     byCategory.set(row.categoryId, list);
   }
   return byCategory;

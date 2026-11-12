@@ -10,6 +10,7 @@ export type NewsCardData = {
   author: string | null;
   publishedAt: Date | null;
   categoryName: string;
+  categoryColor?: string | null;
   notionSaved: boolean;
   notionPageUrl: string | null;
 };
@@ -24,7 +25,7 @@ export function NewsCard({
   article: NewsCardData;
   showCategory?: boolean;
 }) {
-  const color = getCategoryColor(article.categoryName);
+  const color = getCategoryColor(article.categoryName, article.categoryColor);
   const published = article.publishedAt;
 
   return (

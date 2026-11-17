@@ -37,15 +37,23 @@ export function Pagination({
   basePath,
   currentPage,
   totalPages,
+  query,
 }: {
   basePath: string;
   currentPage: number;
   totalPages: number;
+  /** 페이지를 옮겨도 유지할 검색어 */
+  query?: string;
 }) {
   if (totalPages <= 1) return null;
 
-  const href = (page: number) =>
-    page === 1 ? basePath : `${basePath}?page=${page}`;
+  const href = (page: number) => {
+    const params = new URLSearchParams();
+    if (query) params.set("q", query);
+    if (page !== 1) params.set("page", String(page));
+    const qs = params.toString();
+    return qs ? `${basePath}?${qs}` : basePath;
+  };
 
   return (
     <nav

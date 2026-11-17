@@ -36,4 +36,4 @@ No test runner is configured.
 ## Environment
 
 - Windows; the project folder `AI_NEWS` has capital letters, so `create-next-app .` fails — package name is `ai-news`.
-- The git root is `C:\Users\UserK` (home), not this folder.
+- The git root is `C:/Users/UserK/Desktop/AI_NEWS` (this folder). Remote `origin` is `https://github.com/KMSgenesmer/AI_NEWS.git`.

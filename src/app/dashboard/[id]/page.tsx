@@ -4,9 +4,10 @@ import { auth } from "@clerk/nextjs/server";
 import { CategoryTabs } from "@/components/category-tabs";
 import { EmptyCategoryState, EmptyNewsState } from "@/components/empty-state";
 import { NewsCard } from "@/components/news-card";
+import { NewsSearch } from "@/components/news-search";
 import { Pagination } from "@/components/pagination";
 import { SignedOutView } from "@/components/signed-out-view";
-import { getArticles, getCategoryCounts } from "@/lib/news";
+import { countArticles, getArticles, getCategoryCounts } from "@/lib/news";
 import { getCategoryColor } from "@/lib/category-color";
 
 export const metadata = { title: "뉴스 목록 | AI뉴스 모아보기" };
@@ -21,7 +22,8 @@ export default async function CategoryPage({
   if (!userId) return <SignedOutView />;
 
   const { id } = await params;
-  const { page: rawPage } = await searchParams;
+  const { page: rawPage, q: rawQuery } = await searchParams;
+  const keyword = (Array.isArray(rawQuery) ? rawQuery[0] : rawQuery)?.trim() ?? "";
 
   // id는 카테고리 번호 또는 "all"(전체 보기)
   const categoryId = id === "all" ? null : Number(id);
@@ -33,7 +35,12 @@ export default async function CategoryPage({
   // 존재하지 않는 카테고리 번호
   if (categoryId !== null && !current) notFound();
 
-  const totalCount = current ? current.count : total;
+  // 검색 중이면 검색 결과 수, 아니면 카테고리 전체 기사 수
+  const totalCount = keyword
+    ? await countArticles(categoryId, keyword)
+    : current
+      ? current.count
+      : total;
   const title = current ? current.name : "전체 뉴스";
 
   // ?page=N (1부터). 잘못된 값은 1페이지, 범위를 넘으면 마지막 페이지로 맞춘다.
@@ -42,7 +49,7 @@ export default async function CategoryPage({
   const page = Number.isInteger(pageValue)
     ? Math.min(Math.max(pageValue, 1), totalPages)
     : 1;
-  const items = await getArticles(categoryId, page, PAGE_SIZE);
+  const items = await getArticles(categoryId, page, PAGE_SIZE, keyword);
 
   return (
     <>
@@ -67,7 +74,7 @@ export default async function CategoryPage({
           aria-live="polite"
           className="mt-1 text-sm text-slate-500 dark:text-neutral-400"
         >
-          총 {totalCount}건 · 최신순
+          {keyword && `‘${keyword}’ 검색 결과 `}총 {totalCount}건 · 최신순
           {totalPages > 1 && ` · ${page} / ${totalPages} 페이지`}
         </p>
       </div>
@@ -76,8 +83,23 @@ export default async function CategoryPage({
         <CategoryTabs tabs={tabs} total={total} selected={categoryId ?? "all"} />
       </div>
 
+      <div className="mb-6">
+        <NewsSearch
+          key={keyword}
+          basePath={`/dashboard/${id}`}
+          initialQuery={keyword}
+        />
+      </div>
+
       {items.length === 0 ? (
-        categoryId === null ? (
+        keyword ? (
+          <p
+            role="status"
+            className="rounded-2xl border border-dashed border-slate-300 p-10 text-center text-sm text-slate-500 dark:border-neutral-700 dark:text-neutral-400"
+          >
+            ‘{keyword}’에 해당하는 뉴스가 없어요
+          </p>
+        ) : categoryId === null ? (
           <EmptyNewsState />
         ) : (
           <EmptyCategoryState />
@@ -99,6 +121,7 @@ export default async function CategoryPage({
             basePath={`/dashboard/${id}`}
             currentPage={page}
             totalPages={totalPages}
+            query={keyword}
           />
         </>
       )}

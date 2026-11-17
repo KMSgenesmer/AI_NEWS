@@ -1,4 +1,4 @@
-import { count, desc, eq, lte, max, sql } from "drizzle-orm";
+import { and, count, desc, eq, ilike, lte, max, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { articles, categories } from "@/db/schema";
 
@@ -25,11 +25,36 @@ export async function getCategoryCounts(): Promise<CategoryWithCount[]> {
   return rows.filter((c) => c.name !== "미분류" || c.count > 0);
 }
 
+// 제목 또는 요약에 키워드가 들어 있는 기사 조건. LIKE 와일드카드(% _ \)는 글자 그대로 검색한다.
+function articleFilter(categoryId: number | null, keyword?: string) {
+  const term = keyword?.trim();
+  const pattern = term ? `%${term.replace(/[\\%_]/g, "\\$&")}%` : null;
+  return and(
+    categoryId === null ? undefined : eq(articles.categoryId, categoryId),
+    pattern
+      ? or(ilike(articles.title, pattern), ilike(articles.summary, pattern))
+      : undefined,
+  );
+}
+
+// 조건에 맞는 기사 수 (페이지 수 계산용)
+export async function countArticles(
+  categoryId: number | null,
+  keyword?: string,
+): Promise<number> {
+  const [row] = await db
+    .select({ value: count() })
+    .from(articles)
+    .where(articleFilter(categoryId, keyword));
+  return row?.value ?? 0;
+}
+
 // 최신순: 발행 시각이 없는 기사는 뒤로, 같으면 수집 시각 순. (page는 1부터 시작)
 export async function getArticles(
   categoryId: number | null,
   page: number,
   pageSize: number,
+  keyword?: string,
 ) {
   return db
     .select({
@@ -47,7 +72,7 @@ export async function getArticles(
     })
     .from(articles)
     .innerJoin(categories, eq(articles.categoryId, categories.id))
-    .where(categoryId === null ? undefined : eq(articles.categoryId, categoryId))
+    .where(articleFilter(categoryId, keyword))
     .orderBy(
       sql`${articles.publishedAt} desc nulls last`,
       desc(articles.fetchedAt),

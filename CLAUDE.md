@@ -21,6 +21,10 @@ npx drizzle-kit  # migrations (no drizzle.config.ts yet)
 
 No test runner is configured.
 
+## Custom commands
+
+- `/news-workflow [브랜치 이름]` (`.claude/commands/news-workflow.md`): use it when developing a new feature. It checks the current branch (warns and asks before moving to `main`), creates the feature branch from the argument (if omitted, asks what to build and suggests a lowercase-hyphen name), and re-states the stack and conventions from this file. When the user types `완료` or `done`, it lists changed files, proposes a Korean commit message, commits after confirmation, merges into `main`, and summarizes the work. It never pushes unless asked.
+
 ## Stack and layout
 
 - Next.js 16 (App Router, `src/` dir, alias `@/*` → `src/*`), React 19, Tailwind 4, TypeScript. This Next.js version differs from older releases; docs are local in `node_modules/next/dist/docs/` — consult them before writing code (see AGENTS.md).

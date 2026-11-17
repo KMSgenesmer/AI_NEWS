@@ -1,3 +1,4 @@
+import { DeleteNewsButton } from "@/components/delete-news-button";
 import { getCategoryColor } from "@/lib/category-color";
 import { formatRelativeTime } from "@/lib/time";
 
@@ -29,7 +30,9 @@ export function NewsCard({
   const published = article.publishedAt;
 
   return (
-    <article className="flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900">
+    <article className="relative flex h-full flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900">
+      <DeleteNewsButton id={article.id} title={article.title} />
+
       {showCategory && (
         <span
           className={`w-fit rounded-full px-2.5 py-0.5 text-xs font-medium ${color.badge}`}
@@ -38,7 +41,7 @@ export function NewsCard({
         </span>
       )}
 
-      <h2 className="line-clamp-2 text-base font-semibold leading-snug text-slate-900 dark:text-neutral-100">
+      <h2 className="line-clamp-2 pr-6 text-base font-semibold leading-snug text-slate-900 dark:text-neutral-100">
         <a
           href={article.url}
           target="_blank"

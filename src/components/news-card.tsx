@@ -1,3 +1,4 @@
+import { NotionSaveButton } from "@/components/notion-save-button";
 import { getCategoryColor } from "@/lib/category-color";
 import { formatRelativeTime } from "@/lib/time";
 
@@ -77,33 +78,11 @@ export function NewsCard({
           원문 보기 ↗
         </a>
 
-        {article.notionSaved ? (
-          article.notionPageUrl ? (
-            <a
-              href={article.notionPageUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`rounded-lg bg-emerald-50 px-3 py-2.5 text-sm font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 ${focusRing}`}
-            >
-              ✓ 저장됨
-              <span className="sr-only"> (노션 페이지 열기, 새 창)</span>
-            </a>
-          ) : (
-            <span className="rounded-lg bg-emerald-50 px-3 py-2.5 text-sm font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-              ✓ 저장됨
-            </span>
-          )
-        ) : (
-          // 노션 저장 기능은 구현 단계 7에서 연결한다.
-          <button
-            type="button"
-            disabled
-            title="준비 중입니다"
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 opacity-60 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200"
-          >
-            NOTION저장<span className="sr-only"> (준비 중)</span>
-          </button>
-        )}
+        <NotionSaveButton
+          articleId={article.id}
+          initialSaved={article.notionSaved}
+          initialUrl={article.notionPageUrl}
+        />
       </div>
     </article>
   );

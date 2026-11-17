@@ -4,9 +4,11 @@ import { AddCategory } from "@/components/add-category";
 import { CategoryTabs } from "@/components/category-tabs";
 import { EmptyNewsState } from "@/components/empty-state";
 import { NewsCard } from "@/components/news-card";
+import { NewsCountBadge } from "@/components/news-count-badge";
 import { SignedOutView } from "@/components/signed-out-view";
 import { getCategoryColor } from "@/lib/category-color";
 import {
+  countArticles,
   getCategoryCounts,
   getLastFetchedAt,
   getLatestArticlesByCategory,
@@ -23,11 +25,13 @@ export default async function DashboardPage() {
   // 페이지는 미들웨어에서 막지 않으므로, 로그인하지 않았으면 DB를 조회하지 않는다. (PRD 5.1)
   if (!userId) return <SignedOutView />;
 
-  const [categories, articlesByCategory, lastFetchedAt] = await Promise.all([
-    getCategoryCounts(),
-    getLatestArticlesByCategory(PER_CATEGORY),
-    getLastFetchedAt(),
-  ]);
+  const [categories, articlesByCategory, lastFetchedAt, totalCount] =
+    await Promise.all([
+      getCategoryCounts(),
+      getLatestArticlesByCategory(PER_CATEGORY),
+      getLastFetchedAt(),
+      countArticles(null), // DB에 저장된 전체 뉴스 수
+    ]);
   const total = categories.reduce((sum, c) => sum + c.count, 0);
   // 사용자가 방금 추가한 빈 카테고리도 보여야 하므로 기사 수와 상관없이 모두 섹션으로 둔다.
   // ("미분류"는 getCategoryCounts에서 기사가 0건이면 이미 빠진다.)
@@ -38,9 +42,12 @@ export default async function DashboardPage() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold">오늘의 뉴스</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-neutral-400">
-            총 {total}건 · {sections.length}개 카테고리
-          </p>
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <NewsCountBadge count={totalCount} />
+            <span className="text-sm text-slate-500 dark:text-neutral-400">
+              {sections.length}개 카테고리
+            </span>
+          </div>
         </div>
         <div className="flex flex-col items-end gap-2 text-sm">
           <AddCategory variant="button" />

@@ -41,7 +41,7 @@ export default async function DashboardPage() {
     <>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-lg font-semibold">오늘의 뉴스</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">오늘의 뉴스</h1>
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
             <NewsCountBadge count={totalCount} />
             <span className="text-sm text-slate-500 dark:text-neutral-400">
@@ -107,7 +107,7 @@ export default async function DashboardPage() {
                   </Link>
                 </div>
                 {items.length === 0 ? (
-                  <p className="rounded-2xl border border-dashed border-slate-300 px-5 py-8 text-center text-sm text-slate-400 dark:border-neutral-700 dark:text-neutral-500">
+                  <p className="rounded-xl border border-dashed border-slate-300 px-5 py-8 text-center text-sm text-slate-400 dark:border-neutral-700 dark:text-neutral-500">
                     이 카테고리에는 아직 뉴스가 없어요
                   </p>
                 ) : (

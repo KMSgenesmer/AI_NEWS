@@ -4,7 +4,7 @@ export function NewsCardSkeleton({ delay = 0 }: { delay?: number }) {
     <div
       aria-hidden="true"
       style={{ animationDelay: `${delay}ms` }}
-      className="flex h-full animate-pulse flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm motion-reduce:animate-none dark:border-neutral-800 dark:bg-neutral-900"
+      className="flex h-full animate-pulse flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 sm:p-6 motion-reduce:animate-none dark:border-neutral-800 dark:bg-neutral-900"
     >
       {/* 카테고리 배지: 색 점 + 이름 */}
       <div className="flex items-center gap-2">

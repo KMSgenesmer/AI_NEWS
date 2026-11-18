@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   if (!userId) return <>{children}</>;
 
   return (
-    <div className="flex min-h-screen flex-1 flex-col bg-slate-50 text-slate-900 dark:bg-neutral-950 dark:text-neutral-100">
+    <div className="flex min-h-screen flex-1 flex-col bg-white text-slate-900 dark:bg-neutral-950 dark:text-neutral-100">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-20 focus:rounded-lg focus:bg-indigo-600 focus:px-4 focus:py-2 focus:text-white"

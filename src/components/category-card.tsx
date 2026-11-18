@@ -18,7 +18,7 @@ export function CategoryCard({
     <Link
       href={`/dashboard/${id}`}
       aria-label={`${name}, 뉴스 ${count}건 보기`}
-      className="flex h-full flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:border-neutral-800 dark:bg-neutral-900"
+      className="flex h-full flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 transition-colors hover:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-600"
     >
       <div className="flex items-center justify-between gap-2">
         <span className="flex items-center gap-2 font-semibold">
@@ -65,7 +65,7 @@ export function AddCategoryCard() {
       disabled
       title="준비 중입니다"
       aria-label="카테고리 추가 (준비 중)"
-      className="flex h-full min-h-40 w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-slate-300 p-5 text-slate-500 opacity-70 dark:border-neutral-700 dark:text-neutral-400"
+      className="flex h-full min-h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 p-5 text-slate-500 opacity-70 dark:border-neutral-700 dark:text-neutral-400"
     >
       <span aria-hidden="true" className="text-2xl leading-none">
         ＋

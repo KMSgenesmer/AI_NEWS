@@ -11,9 +11,10 @@ export type CategoryTab = {
 
 const base =
   "shrink-0 rounded-full px-4 py-2.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500";
-const active = "bg-indigo-600 text-white";
+const active =
+  "bg-slate-900 text-white dark:bg-neutral-100 dark:text-neutral-900";
 const inactive =
-  "border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:bg-neutral-800";
+  "text-slate-600 hover:bg-slate-100 dark:text-neutral-300 dark:hover:bg-neutral-800";
 
 // selected: 카테고리 id, 또는 전체 보기이면 "all"
 export function CategoryTabs({

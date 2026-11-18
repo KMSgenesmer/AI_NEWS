@@ -6,7 +6,7 @@ export function EmptyNewsState() {
   return (
     <div
       role="status"
-      className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-slate-300 px-6 py-20 text-center dark:border-neutral-700"
+      className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-slate-300 px-6 py-20 text-center dark:border-neutral-700"
     >
       <div
         aria-hidden="true"
@@ -30,7 +30,7 @@ export function EmptyCategoryState() {
   return (
     <div
       role="status"
-      className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-neutral-700"
+      className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-neutral-700"
     >
       <p className="font-semibold">이 카테고리에는 아직 뉴스가 없어요</p>
       <Link

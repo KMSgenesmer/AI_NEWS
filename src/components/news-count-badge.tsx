@@ -3,7 +3,7 @@ export function NewsCountBadge({ count }: { count: number }) {
   return (
     <p
       aria-live="polite"
-      className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1.5 text-sm font-medium text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300"
+      className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 dark:bg-neutral-800 dark:text-neutral-200"
     >
       <svg
         aria-hidden="true"

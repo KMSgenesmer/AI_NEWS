@@ -28,7 +28,8 @@ export function DeleteNewsButton({ id, title }: { id: number; title: string }) {
   }
 
   return (
-    <div className="absolute right-2 top-2">
+    // 마우스 환경에서는 카드에 호버/포커스할 때만 보이고, 터치 환경에서는 항상 보인다.
+    <div className="absolute right-3 top-3 z-10 transition-opacity duration-200 focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
       <button
         type="button"
         onClick={handleDelete}

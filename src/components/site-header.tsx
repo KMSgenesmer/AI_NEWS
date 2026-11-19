@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { FetchNewsButton } from "@/components/fetch-news-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function SiteHeader() {
   return (
@@ -32,6 +33,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <FetchNewsButton compact />
           <UserButton />
+          <ThemeToggle />
         </div>
       </div>
     </header>

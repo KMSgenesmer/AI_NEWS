@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist_Mono } from "next/font/google";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -20,7 +21,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ko"
       className={`${geistMono.variable} h-full antialiased`}
+      // 테마 스크립트가 hydration 전에 dark 클래스를 붙이므로 불일치 경고를 끈다.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <Suspense fallback={null}>
           <ClerkProvider>{children}</ClerkProvider>

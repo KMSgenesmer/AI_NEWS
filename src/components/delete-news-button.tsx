@@ -41,7 +41,7 @@ export function DeleteNewsButton({ id, title }: { id: number; title: string }) {
         {pending ? (
           <span
             aria-hidden="true"
-            className="size-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600"
+            className="size-4 animate-spin rounded-full border-2 border-slate-300 border-t-indigo-600 dark:border-neutral-600 dark:border-t-indigo-400"
           />
         ) : (
           <span aria-hidden="true">✕</span>

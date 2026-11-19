@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* 다크 모드는 OS 설정이 아니라 <html class="dark"> 여부로 결정한다 (헤더의 토글 버튼으로 전환). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -16,11 +19,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  color-scheme: dark;
 }
 
 body {
